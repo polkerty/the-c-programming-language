@@ -4,7 +4,7 @@ int main() {
     unsigned int i = 1;
     int bits = 0;
     while (bits++, i > 0) {
-        printf("[%d]: %u\n", bits, i);
+        printf("[%2d]: %10u\n", bits, i);
         i <<= 1;
     }
 }
