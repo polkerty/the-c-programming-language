@@ -9,4 +9,6 @@ int main() {
 
         c = getchar();
     }
+
+    printf("EOF: %d\n", EOF);
 }
