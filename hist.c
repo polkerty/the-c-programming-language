@@ -9,7 +9,7 @@ int main() {
     while ((c = getchar())!=EOF) {
         hist[c]++;
     };
-    for ( i=65; i < 256; ++i ) {
+    for ( i=40; i < 256; ++i ) {
         printf("[%c][%3d]: %3d\n", i, i, hist[i]);
     }
 }
