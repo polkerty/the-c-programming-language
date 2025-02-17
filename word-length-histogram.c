@@ -2,7 +2,8 @@
 
 #define IN 0
 #define OUT 1
-#define MAX_LEN 10
+#define MAX_LEN 12
+#define MAX_DIAGRAM_HEIGHT 20
 
 int main() {
 
@@ -11,6 +12,7 @@ int main() {
     int state = IN;
     int c, i, j;
     int cur_count = 0;
+    int scaled_size;
 
     int max_size = 0; 
 
@@ -34,22 +36,26 @@ int main() {
                 cur_count = MAX_LEN;
             }
             hist[cur_count] ++;
-            if ( cur_count > max_size) {
-                max_size = cur_count;
+            if ( hist[cur_count] > max_size) {
+                max_size = hist[cur_count];
             }
             state = OUT;
             cur_count = 0;
         } else if ( !is_letter_or_number && state == OUT ) {
             // nothing to do 
         }
-        printf("char: %c, cur count: %d, is_letter_or_number: %d\n", 
-            c, cur_count, is_letter_or_number);
+        // printf("char: %c, cur count: %d, is_letter_or_number: %d\n", 
+        //     c, cur_count, is_letter_or_number);
     }
 
     // 2. Draw vertical histogram
-    for ( i = 0; i < max_size; ++i ) {
+    for ( i = 0; i < MAX_DIAGRAM_HEIGHT; ++i ) {
         for ( j = 1; j <= MAX_LEN; ++j ) {
-            if ( i >= max_size - hist[j] ) {
+            scaled_size =  1.0 * MAX_DIAGRAM_HEIGHT * hist[j] / max_size;
+            // printf("i=%d, j=%d, hist[j]=%d, max_size=%d, scaled_size=%d\n",
+            //     i, j, hist[j], max_size, scaled_size
+            // );
+            if ( i >= MAX_DIAGRAM_HEIGHT - scaled_size ) {
                 printf(" ##\t");
             } else {
                 printf("   \t");
@@ -63,6 +69,11 @@ int main() {
     printf("\n");
     for ( i = 1; i <= MAX_LEN; ++i ) {
         printf("%2d\t", i);
+    }
+    printf("\n\n");
+
+    for (i = 1; i <= MAX_LEN; ++i ) {
+        printf("%d\t", hist[i]);
     }
     printf("\n");
 
