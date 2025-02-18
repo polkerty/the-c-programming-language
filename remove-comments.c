@@ -4,12 +4,17 @@
  * It handles both slash-star and slash-slash style comments.
  * 
  * This is a simple recursive-descent parser.
+ * Note that it operates in a streaming fashion, without any look-ahead.
+ * This is possible because we are checking for only a few, relatively
+ * simple, constructions. See consume_slash_star for an example
+ * trick we can use to get away with this approach.
+ * 
  */
 
 #include <stdio.h>
 
 void consume_program();
-void consume_string();
+void consume_string(char);
 void consume_slash_star();
 void consume_slash_slash();
 
@@ -43,9 +48,9 @@ void consume_program() {
                 // NOTE: it's impossible for the second char to itself be the first char of a comment,
                 // since we know it's not a /.
             }
-        } else if ( c == '"' ) { // A comment
+        } else if ( c == '"' || c == '\'' ) { // A string or character constant, handled similarly
             printf("%c", c);
-            consume_string();
+            consume_string(c);
         } else {
             // Since we didn't start a comment or a string, just print the character out.
             printf("%c", c);
@@ -53,12 +58,13 @@ void consume_program() {
     }
 }
 
-void consume_string() {
+void consume_string(char terminus) { 
     int c;
     int escaped = 0;
     int was_escaped = 0;
     int done = 0;
-    // Assume the initial `"` has already been consumed by our caller.
+    // Assume the initial `"` or `'` (the terminus) has already been consumed by our caller,
+    // so we only need to look for the closing one.
     while (1) {
         c = getchar();
         was_escaped = escaped; // save the value so we can check it to clear later
@@ -71,8 +77,8 @@ void consume_string() {
             if ( !escaped ) {
                 escaped = 1;
             }
-        } else if ( c == '"') {
-            // Is this actually the end of the string?
+        } else if ( c == terminus) {
+            // Is this actually the end of the string/character constant?
             if ( !escaped ) {
                 done = 1; // don't return here because we still need to print out the char
             }
@@ -128,7 +134,6 @@ void consume_slash_slash() {
         }
     }
 }
-
 
 // a tricky test case
 char mysterious_string/*ignore me!*/[] = "This is a /*string*/ that \" // appears to contain comments, but does not.";
