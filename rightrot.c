@@ -2,6 +2,7 @@
 #include <stdlib.h>
 
 unsigned int rightrot(unsigned int x, unsigned int n);
+void print_binary(unsigned int);
 
 int main(int argc, char* argv[]) {
 
@@ -14,13 +15,17 @@ int main(int argc, char* argv[]) {
     x = atoi(argv[1]);
     n = atoi(argv[2]);
 
-    printf("x: %u %x, n: %u %x, x <r> n: %u %x\n", 
-        x, x,
-        n, n, 
-        rightrot(x, n), rightrot(x, n)
-    );
+    print_binary(x);
+    print_binary(rightrot(x, n));
 
+}
 
+void print_binary(unsigned int x) {
+    printf (" 0x");
+    for ( int i = 31; i > -1; --i ) {
+        printf("%c", (x & (1 << i) ? '1' : '0'));
+    }
+    printf(" = %u\n", x);
 }
 
 unsigned int rightrot(unsigned int x, unsigned int n) {
@@ -36,10 +41,10 @@ unsigned int rightrot(unsigned int x, unsigned int n) {
 
     while (x) {
         if ( x & 1 ) {
-            if ( n < pos ) {
+            if ( n <= pos ) {
                 y |= 1 << (pos - n);
             } else {
-                y |= 1 << (pos + nbits - n);
+                y |= ((unsigned int)1) << (pos + nbits - n);
             }
         }
         x >>= 1;
