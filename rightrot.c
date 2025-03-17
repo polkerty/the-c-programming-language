@@ -2,6 +2,7 @@
 #include <stdlib.h>
 
 unsigned int rightrot(unsigned int x, unsigned int n);
+unsigned int rightrot2(unsigned int x, unsigned int n);
 void print_binary(unsigned int);
 
 int main(int argc, char* argv[]) {
@@ -17,6 +18,7 @@ int main(int argc, char* argv[]) {
 
     print_binary(x);
     print_binary(rightrot(x, n));
+    print_binary(rightrot2(x, n));
 
 }
 
@@ -54,3 +56,16 @@ unsigned int rightrot(unsigned int x, unsigned int n) {
     return y;
 }
  
+ unsigned int rightrot2(unsigned int x, unsigned int n) {
+    int last_bit = 0;
+    unsigned int left_bit_mask = ~0 - (((unsigned int)(~0)) >> 1);
+    
+    while ( n-- ) {
+        last_bit = x & 1;
+        x >>= 1;
+        if ( last_bit ) {
+            x |= left_bit_mask;
+        }
+    }
+    return x;
+ }
