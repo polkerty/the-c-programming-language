@@ -1,7 +1,7 @@
 #include <string.h>
 #include <stdio.h>
 
-void reverse(char buf[]) {
+int reverse(char buf[]) {
     int i, j;
     char tmp;
 
@@ -15,5 +15,7 @@ void reverse(char buf[]) {
         i++;
         j--;
     }
+
+    return i;
 
 }
